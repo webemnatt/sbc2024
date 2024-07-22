@@ -91,6 +91,7 @@ Substitua "localhost","pgport","mydatabase","myusername" e "mypassword" pelas in
 ```
 {
         "env": {
+            "SPRING_PROFILES_ACTIVE": "prod",
             "PGHOST": "localhost",
             "PGPORT": "pgport",
             "PGDATABASE": "mydatabase",
