@@ -105,3 +105,5 @@ Substitua "localhost","pgport","mydatabase","myusername" e "mypassword" pelas in
 Para não precisar fazer CRUD via CURL. Tem interface gráfica para consumir os endpoints.
 
 `http://localhost:8080/swagger-ui.html`
+
+Uma vez em prod, acessar `https://sbc2024-api-prd.up.railway.app/swagger-ui/index.html`
