@@ -2,50 +2,51 @@
 
 Java RESTFul criada para o bootcamp 2024.
 
-## Diagrama de Classes
+Uma API de livraria simples que faz o cadastro, atualização, consulta e deleção de autores.
 
-_User_ é uma entidade necessária e imprescindível nesse modelo de classes.
-Seu relacionamento com _Account_ e _Card_ é de 1 : 1. Seu relacionamento com os demais, é de 1 : muitos.
+Com esta API, você tem os endpoints:
+
+* `POST /authors`: cadastrar um novo autor.
+* `POST /authors/{id}/books`: cadastrar um novo livro.
+* `GET /authors`: recuperar todos os autores cadastrados.
+* `GET /authors/{id}`: fazer a busca de um autor por ID.
+* `GET /authors/{id}/books`: recuperar todos os livros cadastrados de um autor por ID.
+* `PUT /authors/{id}`: atualizar informações de um autor específico e existente.
+* `DELETE /authors/{id}`: deletar um autor.
+
+_Author_ é uma entidade necessária e imprescindível nesse modelo de classes.
+Seu relacionamento com _Biography_ é de 1 : 1. Seu relacionamento com _Book_ é de 1 : muitos.
 
 ```mermaid
 classDiagram
-    class User {
+    class Author {
         - name: string
-        - account: Account
-        - features: Feature[]
-        - card: Card
-        - news: News[]
+        - biography: Biography
+        - books: Book[]
     }
 
-    class Account {
-        - number: string
-        - agency: string
-        - balance: BigDecimal
-        - limit: BigDecimal
+    class Biography {
+        - text: string
     }
 
-    class Feature {
-        - icon: string
-        - description: string
+    class Book {
+        - title: string
+        - publicationDate: string
+        - tag: string
     }
 
-    class Card {
-        - number: string
-        - limit: BigDecimal
-    }
+    Author "1" *-- "1" Biography
+    Author "1" *-- "n" Book
 
-    class News {
-        - icon: string
-        - description: string
-    }
-
-    User "1" *-- "1" Account
-    User "1" *-- "n" Feature
-    User "1" *-- "1" Card
-    User "1" *-- "n" News
 ```
 
----
+## Erro "Application run failed"
+
+Caso ocorra o erro `ERROR 12634` ao rodar o projeto, é necessário parar o uso da porta 8080.
+
+`sudo netstat -tulnp | grep :8080` lista todas as portas utilizadas. A resposta será como `tcp        0      0 0.0.0.0:8080            0.0.0.0:*               OUÇA       ${PID}/docker-proxy `.
+`sudo kill ${PID}`: encerra o uso.
+
 
 ## Configuração
 
@@ -69,11 +70,10 @@ Para que o vscode siga o script do arquivo de configuração,
 ### ambiente dev ([h2.console](http://localhost:8080/h2-console))
 
 ```
-    {
-      "env": {
-        "SPRING_PROFILES_ACTIVE": "dev",
-      }
-    },
+  "env": {
+    "SPRING_PROFILES_ACTIVE": "dev",
+  }
+
 ```
 Ao rodar o projeto novamente, será exibido algo como "Hibernate: drop"... as tabelas foram criadas no banco de dados local.
 
@@ -89,31 +89,19 @@ Visualização de tabelas na aba "data".
 Substitua "localhost","pgport","mydatabase","myusername" e "mypassword" pelas informadas na página do railway ao gerar um novo Postgres.
 
 ```
-{
-        "env": {
-            "SPRING_PROFILES_ACTIVE": "prod",
-            "PGHOST": "localhost",
-            "PGPORT": "pgport",
-            "PGDATABASE": "mydatabase",
-            "PGUSER": "myusername",
-            "PGPASSWORD": "mypassword"
-        }
-    }
+  "env": {
+      "SPRING_PROFILES_ACTIVE": "prod",
+      "PGHOST": "localhost",
+      "PGPORT": "pgport",
+      "PGDATABASE": "mydatabase",
+      "PGUSER": "myusername",
+      "PGPASSWORD": "mypassword"
+  }
+
 ```
-
-## Acessando o h2-console no navegador
-
-Insira o endereço `http://localhost:8080/h2-console`
 
 ## Dependência swagger
 
-Para não precisar fazer CRUD via CURL. Tem interface gráfica para consumir os endpoints. Documenta, faz testes.
+Para não precisar fazer CRUD via CURL. Tem interface gráfica para consumir os endpoints.
 
 `http://localhost:8080/swagger-ui.html`
-
-## Erro "Application run failed"
-
-Caso ocorra o erro `ERROR 12634`, é necessário parar o uso da porta 8080.
-
-`sudo netstat -tulnp | grep :8080` lista todas as portas utilizadas. A resposta será como `tcp        0      0 0.0.0.0:8080            0.0.0.0:*               OUÇA       ${PID}/docker-proxy `.
-`sudo kill ${PID}`: encerra o uso.
